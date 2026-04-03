@@ -12,7 +12,9 @@
 {% block stylesheets %}{% endblock stylesheets %} 
 </head> 
 <body> 
-{% include "includes/header.html" %} 
+{% block navbar %}
+{% include "includes/header.html" %}
+{% endblock %}
 {% block content %} {% endblock content %} 
 {% include "includes/footer.html" %} 
 </body> 
