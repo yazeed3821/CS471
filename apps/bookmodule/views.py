@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.db.models import Q
+from .models import Book
 
 def index(request):
     return render(request, "bookmodule/index.html")
@@ -36,21 +38,15 @@ def search(request):
         isTitle = request.POST.get('option1')
         isAuthor = request.POST.get('option2')
         
-        # now filter
-        books = getBooksList()
-        newBooks = []
-        
-        for item in books:
-            contained = False
-            if isTitle and string in item['title'].lower():
-                contained = True
+        if isTitle and isAuthor:
+            books = Book.objects.filter(models.Q(title__icontains=string) | models.Q(author__icontains=string))
+        elif isTitle:
+            books = Book.objects.filter(title__icontains=string)
+        elif isAuthor:
+            books = Book.objects.filter(author__icontains=string)
+        else:
+            books = Book.objects.all()
             
-            if not contained and isAuthor and string in item['author'].lower():
-                contained = True
-                
-            if contained:
-                newBooks.append(item)
-                
-        return render(request, 'bookmodule/bookList.html', {'books': newBooks})
-        
+        return render(request, 'bookmodule/bookList.html', {'books': books})
+    
     return render(request, 'bookmodule/search.html')
