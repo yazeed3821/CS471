@@ -1,3 +1,5 @@
+from urllib import request
+from django.db import models
 from django.shortcuts import render
 from django.db.models import Q
 from .models import Book
@@ -38,15 +40,36 @@ def search(request):
         isTitle = request.POST.get('option1')
         isAuthor = request.POST.get('option2')
         
+        
         if isTitle and isAuthor:
-            books = Book.objects.filter(models.Q(title__icontains=string) | models.Q(author__icontains=string))
+            books = Book.objects.filter(Q(title__icontains=string) | Q(author__icontains=string))
+        
+        
         elif isTitle:
             books = Book.objects.filter(title__icontains=string)
+            
         elif isAuthor:
             books = Book.objects.filter(author__icontains=string)
+            
         else:
             books = Book.objects.all()
             
         return render(request, 'bookmodule/bookList.html', {'books': books})
     
     return render(request, 'bookmodule/search.html')
+
+
+def simple_query(request):
+   mybooks = Book.objects.filter(title__icontains='and') 
+   return render(request, 'bookmodule/bookList.html', {'books': mybooks})
+
+def complex_query(request):
+    mybooks = Book.objects.filter(author__isnull=False)\
+                         .filter(title__icontains='and')\
+                         .filter(edition__gte=2)\
+                         .exclude(price__lte=100)[:10]
+    
+    if len(mybooks) >= 1:
+        return render(request, 'bookmodule/bookList.html', {'books': mybooks})
+    else:
+        return render(request, 'bookmodule/index.html')
