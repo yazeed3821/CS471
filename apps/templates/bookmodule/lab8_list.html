@@ -1,0 +1,11 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+    <h2>Book List</h2>
+    <ul>
+    {% for book in books %}
+        <li>ID: {{book.id}}, Title: {{book.title}} (Price: {{book.price}}, Ed: {{book.edition}})</li>
+    {% empty %}
+        <li>No books match this criteria.</li>
+    {% endfor %}
+    </ul>
+{% endblock %}
