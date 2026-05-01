@@ -1,0 +1,21 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+    <h2>Lab 9 - Publisher Analysis</h2>
+    <ul>
+    {% for p in publishers %}
+        <li>
+            <strong>{{ p.name }}</strong>: 
+            {% if task_num == 2 %} Total Stock: {{ p.total_stock }} {% endif %}
+            {% if task_num == 3 %} Oldest Book: {{ p.oldest_book|date:"Y-m-d" }} {% endif %}
+            {% if task_num == 4 %} 
+                Avg Price: {{ p.avg_p|floatformat:2 }}, Min: {{ p.min_p }}, Max: {{ p.max_p }} 
+            {% endif %}
+            {% if task_num == 5 or task_num == 6 %} 
+                Matched Book Count: {{ p.book_count }}
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>No data found. Ensure you have added Publishers and linked Books to them in the Admin.</li>
+    {% endfor %}
+    </ul>
+{% endblock %}
