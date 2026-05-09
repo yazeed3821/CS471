@@ -1,0 +1,20 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<h2>Book List (Lab 10 Part 2 - Django Forms)</h2>
+<a href="{% url 'lab10_addbook_form' %}">Add New Book</a>
+<table border="1">
+    <tr>
+        <th>Title</th>
+        <th>Actions</th>
+    </tr>
+    {% for book in books %}
+    <tr>
+        <td>{{ book.title }}</td>
+        <td>
+            <a href="{% url 'lab10_editbook_form' book.id %}">Edit</a> | 
+            <a href="{% url 'lab10_deletebook_form' book.id %}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
